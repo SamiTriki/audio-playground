@@ -28,8 +28,7 @@ function draw() {
     var g = 255 - data;
     var r = data  * 2;
 
-    document.documentElement.style.backgroundColor = 'rgba('+r+','+g+','+data+', 0.5)';
-    // debugger;
+    document.documentElement.style.backgroundColor = 'rgba('+r+','+g+','+data+', 0.3)';
 
     for (var i = 0; i < analyser.frequencyBinCount; i++) {
         var value = frequencyData[i];
@@ -40,9 +39,11 @@ function draw() {
         var offset = canvas.height - height - 1;
         var barWidth = canvas.width / analyser.frequencyBinCount;
         drawContext.fillStyle = 'rgba('+red+','+green+','+value+', 1)';
-        // drawContext.fillRect(i * barWidth, offset, 1, 1);
         drawContext.fillRect(i * barWidth, offset, barWidth , value * 4);
 
+        drawContext.strokeStyle = 'rgba(' + (red + 30) + ',' + (green + 30) + ',' + (value + 30) + ', 0.8)';
+        drawContext.lineWidth   = 3;
+        drawContext.strokeRect(i * barWidth, offset, barWidth , value * 4);
     }
     requestAnimationFrame(draw);
 
