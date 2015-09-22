@@ -11,6 +11,7 @@ var audioCtx = new AudioContext();
 var audioSrc = audioCtx.createMediaElementSource(audio);
 var analyser = audioCtx.createAnalyser();
 var drawContext = canvas.getContext('2d');
+analyser.fftSize = 128; //default is 2048
 
 audioSrc.connect(analyser);
 audioSrc.connect(audioCtx.destination);
@@ -23,11 +24,12 @@ function draw() {
     analyser.getByteFrequencyData(frequencyData);
     drawContext.clearRect(0, 0, canvas.width, canvas.height);
 
-    var data = frequencyData[10];
-    var g = 255 - value;
-    var r = value  * 2;
+    var data = frequencyData[10] || 10;
+    var g = 255 - data;
+    var r = data  * 2;
 
-    canvas.style.backgroundColor = 'rgb('+r+','+g+','+data+')';
+    document.documentElement.style.backgroundColor = 'rgba('+r+','+g+','+data+', 0.5)';
+    // debugger;
 
     for (var i = 0; i < analyser.frequencyBinCount; i++) {
         var value = frequencyData[i];
@@ -37,9 +39,9 @@ function draw() {
         var height = canvas.height * percent;
         var offset = canvas.height - height - 1;
         var barWidth = canvas.width / analyser.frequencyBinCount;
-        drawContext.fillStyle = 'rgb('+red+','+green+','+value+')';
+        drawContext.fillStyle = 'rgba('+red+','+green+','+value+', 1)';
         // drawContext.fillRect(i * barWidth, offset, 1, 1);
-        drawContext.fillRect(i * barWidth, offset, barWidth * 5 , value * 5);
+        drawContext.fillRect(i * barWidth, offset, barWidth , value * 4);
 
     }
     requestAnimationFrame(draw);

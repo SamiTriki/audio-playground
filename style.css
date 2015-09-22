@@ -10,9 +10,15 @@
 }
 
 canvas {
-    background-color: black;
+    background-color: transparent;
 }
-
 body {
     margin: 0;
 }
+
+/*html {
+    background: url(moon.jpg) no-repeat center center fixed; 
+    background-size: cover;
+
+}
+*/
