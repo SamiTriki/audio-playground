@@ -48,14 +48,14 @@ var ui = ui || {};
 
         ui.drawContext.beginPath();
 
-        var sliceWidth = ui.canvas.width * 1.0 / soundAnalyzer.frequencyBinCount;
+        var sliceWidth = ui.canvas.width / soundAnalyzer.frequencyBinCount;
         var x = 0;
 
         for (var i = 0; i < soundAnalyzer.frequencyBinCount; i++) {
 
-            var v = frequency[i] / 128.0;
-            var y = v * ui.canvas.height/2;
-
+            var v = frequency[i] / 64;
+            var y = -(v * ui.canvas.height/2) + canvas.height * 2;
+ 
             if(i === 0) {
                 ui.drawContext.moveTo(x, y/2);
             } else {
@@ -65,7 +65,7 @@ var ui = ui || {};
             x += sliceWidth;
         }
 
-        ui.drawContext.lineTo(canvas.width, canvas.height/4);
+        ui.drawContext.lineTo(canvas.width,   canvas.height/2 );
         ui.drawContext.stroke();
     };
 
