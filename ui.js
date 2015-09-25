@@ -68,4 +68,37 @@ var ui = ui || {};
         ui.drawContext.stroke();
     };
 
+    ui.abyss = function (soundAnalyzer, frequency) {
+        decibel.setFFT(32);
+
+        ui.drawContext.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
+
+        ui.drawBackground(frequency[10] || 10);
+        ui.drawContext.strokeStyle = 'black';
+        ui.drawContext.lineWidth = 5;
+
+        var x = canvas.width/2;
+        var y = -(canvas.height/2) + canvas.height;
+
+        var startAngle = 0;
+        var endAngle =  (2 * Math.PI) / 64;
+
+        ui.drawContext.beginPath();
+        for (var i = 0; i < soundAnalyzer.frequencyBinCount; i++) {
+            if (i%2) {
+                radius = frequency[i] * 1.2;
+                ui.drawContext.arc(x, y, radius, startAngle, endAngle, true);
+                startAngle = endAngle;
+                endAngle = endAngle + endAngle;
+            }
+
+        }
+
+        ui.drawContext.stroke();
+
+        startAngle = 0;
+        endAngle =  (2 * Math.PI) / 64;
+
+
+    };
 })(ui);

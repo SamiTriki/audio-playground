@@ -1,14 +1,14 @@
 var decibel = decibel || {};
 (function(decibel){
 
-    decibel.refresh = function(type) {
+    decibel.resetAudioContext = function(type) {
         decibel.audioCtx = new AudioContext();
         if (type === 'stream') {
             decibel.audioSrc = decibel.audioCtx.createMediaStreamSource(decibel.audio);
         } else {
             decibel.audioSrc = decibel.audioCtx.createMediaElementSource(decibel.audio);
         }
-        
+
         decibel.analyser = decibel.audioCtx.createAnalyser();
         decibel.analyser.fftSize = 128; //default is 2048
         decibel.audioSrc.connect(decibel.analyser);
@@ -17,7 +17,7 @@ var decibel = decibel || {};
 
     decibel.staticFile = function () {
         decibel.audio = document.getElementById('sound');
-        decibel.refresh();
+        decibel.resetAudioContext();
         decibel.audioSrc.connect(decibel.audioCtx.destination);
         decibel.audio.play();
     };
@@ -34,7 +34,11 @@ var decibel = decibel || {};
     decibel.gotMicrophone = function (stream) {
         decibel.audio.pause();
         decibel.audio = stream;
-        decibel.refresh('stream');
+        decibel.resetAudioContext('stream');
+    };
+
+    decibel.setFFT = function (size) {
+        decibel.analyser.fftSize = parseInt(size);
     };
 
 })(decibel);

@@ -1,4 +1,4 @@
-var mode = 'oscillo';
+var mode = 'abyss';
 
 decibel.staticFile();
 
@@ -7,6 +7,6 @@ var start = function () {
     ui[mode](decibel.analyser, decibel.frequencyData);
     requestAnimationFrame(start);
 };
-decibel.requestMicro();
+
 start();
 
