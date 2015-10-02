@@ -64,21 +64,21 @@ var ui = ui || {};
             x += sliceWidth;
         }
 
-        ui.drawContext.lineTo(canvas.width, -frequency[frequency.length - 1] + canvas.height);
+        ui.drawContext.lineTo(ui.canvas.width, -frequency[frequency.length - 1] + ui.canvas.height);
         ui.drawContext.stroke();
     };
 
     ui.abyss = function (soundAnalyzer, frequency) {
-        decibel.setFFT(32);
 
+        ui.abyss.FFT = 32;
         ui.drawContext.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
 
         ui.drawBackground(frequency[10] || 10);
         ui.drawContext.strokeStyle = 'black';
         ui.drawContext.lineWidth = 5;
 
-        var x = canvas.width/2;
-        var y = -(canvas.height/2) + canvas.height;
+        var x = ui.canvas.width/2;
+        var y = -(ui.canvas.height/2) + ui.canvas.height;
 
         var startAngle = 0;
         var endAngle =  (2 * Math.PI) / 64;
@@ -93,12 +93,12 @@ var ui = ui || {};
             }
 
         }
-
+        ui.drawContext.translate(ui.canvas.width/2, ui.canvas.height/2);
+        ui.drawContext.rotate(Math.PI / 180);
+        ui.drawContext.translate(-ui.canvas.width/2,-ui.canvas.height/2);
         ui.drawContext.stroke();
 
         startAngle = 0;
         endAngle =  (2 * Math.PI) / 64;
-
-
     };
 })(ui);

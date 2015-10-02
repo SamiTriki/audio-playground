@@ -39,6 +39,7 @@ var decibel = decibel || {};
 
     decibel.setFFT = function (size) {
         decibel.analyser.fftSize = parseInt(size);
+        console.log('FFT set to '+size);
     };
 
 })(decibel);
