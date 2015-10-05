@@ -20,6 +20,7 @@ var ui = ui || {};
     };
 
     ui.bars = function (soundAnalyzer, frequency) {
+        ui.bars.FFT = 128;
         ui.drawContext.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
         ui.drawBackground(frequency[10] || 10);
 
@@ -41,6 +42,8 @@ var ui = ui || {};
     };
 
     ui.oscillo = function (soundAnalyzer, frequency) {
+        ui.oscillo.FFT = 128;
+
         ui.drawContext.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
         ui.drawBackground(frequency[10] || 10);
         ui.lineStroke(frequency[10] || 10);
@@ -69,7 +72,6 @@ var ui = ui || {};
     };
 
     ui.abyss = function (soundAnalyzer, frequency) {
-
         ui.abyss.FFT = 32;
         ui.drawContext.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
 
@@ -84,6 +86,7 @@ var ui = ui || {};
         var endAngle =  (2 * Math.PI) / 64;
 
         ui.drawContext.beginPath();
+
         for (var i = 0; i < soundAnalyzer.frequencyBinCount; i++) {
             if (i%2) {
                 radius = frequency[i] * 1.2;
@@ -91,13 +94,9 @@ var ui = ui || {};
                 startAngle = endAngle;
                 endAngle = endAngle + endAngle;
             }
-
         }
-        ui.drawContext.translate(ui.canvas.width/2, ui.canvas.height/2);
-        ui.drawContext.rotate(Math.PI / 180);
-        ui.drawContext.translate(-ui.canvas.width/2,-ui.canvas.height/2);
         ui.drawContext.stroke();
-
+        ui.drawContext.closePath();
         startAngle = 0;
         endAngle =  (2 * Math.PI) / 64;
     };
