@@ -2,7 +2,8 @@ var decibel = decibel || {};
 (function(decibel){
 
     decibel.resetAudioContext = function(type) {
-        decibel.audioCtx = new AudioContext();
+
+        decibel.audioCtx = (window.AudioContext) ? new AudioContext() : new webkitAudioContext() ;
         if (type === 'stream') {
             decibel.audioSrc = decibel.audioCtx.createMediaStreamSource(decibel.audio);
         } else {
