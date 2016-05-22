@@ -15,3 +15,17 @@ canvas {
 body {
     margin: 0;
 }
+
+#blur {
+    background: url('./suisse.jpg');
+    background-size: cover;
+    -webkit-filter: blur(1px);
+    -moz-filter: blur(1px);
+    -o-filter: blur(1px);
+    -ms-filter: blur(1px);
+    filter: blur(1px);
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    transition: all 0.2s;
+}

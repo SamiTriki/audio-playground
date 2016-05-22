@@ -2,15 +2,17 @@ var mode = 'oscillo';
 
 decibel.staticFile();
 
-var start = function () {
-    decibel.analyser.getByteFrequencyData(decibel.frequencyData);
-
-    if (ui[mode].FFT && decibel.analyser.fftSize !== ui[mode].FFT) {
-        decibel.setFFT( ui[mode].FFT );
+var start = function (isFftSet) {
+    decibel.analyser.getByteFrequencyData(decibel.frequencyData)
+    var frequencyBinCount = decibel.analyser.frequencyBinCount;
+    var frequencyData = decibel.frequencyData;
+    ui[mode](frequencyBinCount, frequencyData)
+    if (ui[mode].FFT && decibel.analyser.fftSize !== ui[mode].FFT && !isFftSet) {
+        decibel.setFFT( ui[mode].FFT )
     }
-    ui[mode](decibel.analyser, decibel.frequencyData);
-    requestAnimationFrame(start);
+    isFftSet = true;
+    requestAnimationFrame(function () {start(isFftSet)})
 };
 
-start();
+start(false);
 

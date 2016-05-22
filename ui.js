@@ -1,81 +1,102 @@
 var ui = ui || {};
 (function(ui){
-    ui.canvas = document.getElementById('canvas');
-    ui.canvas.width = window.innerWidth;
-    ui.canvas.height = window.innerHeight;
-    ui.drawContext = ui.canvas.getContext('2d');
 
-    ui.drawBackground = function(frequency) {
-        var blue = frequency;
+    ui.canvas = document.getElementById('canvas')
+    ui.drawContext = ui.canvas.getContext('2d')
+    ui.blurbg = document.getElementById('blur')
+    function setbounds() {
+        ui.canvas.width = window.innerWidth;
+        ui.canvas.height = window.innerHeight;
+    }
+
+    setbounds()
+
+    window.onresize = function(e) {
+        setbounds()
+    }
+
+    function drawBackground(frequency) {
+        var blue  = frequency;
         var green = 255 - frequency;
-        var red = frequency  * 2;
+        var red   = frequency  * 2;
         document.documentElement.style.backgroundColor = 'rgba('+ red +','+ green +','+ blue +', 0.3)';
-    };
+    }
 
-    ui.lineStroke = function(frequency) {
-        var blue = frequency;
+    function arrAvg(arr) {
+        return _.reduce(arr, function (p, c) {
+            return p + c;
+        }) / arr.length;
+    }
+
+    function blurBackground(frequency) {
+        ui.blurbg.style.WebkitFilter = "blur("+(Math.floor(arrAvg(frequency)/5))+"px)"
+    }
+
+    function lineStroke(frequency) {
+        var blue  = frequency;
         var green = 255 - frequency;
-        var red = frequency  * 2;
+        var red   = frequency  * 2;
         ui.drawContext.strokeStyle = 'rgba('+(green + 30) +','+(red + 30) +','+(blue + 30) +', 1)';
     };
 
-    ui.bars = function (soundAnalyzer, frequency) {
-        ui.bars.FFT = 128;
-        ui.drawContext.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
-        ui.drawBackground(frequency[10] || 10);
+    ui.bars = function (frequencyBinCount, frequency) {
+        ui.bars.FFT = 32;
+        blurBackground(frequency || [10,10]);
+        // ui.drawContext.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
 
-        for (var i = 0; i < soundAnalyzer.frequencyBinCount; i++) {
-            var value = frequency[i];
-            var green = 255 - value;
-            var red = value  * 2;
-            var percent = value / 256;
-            var height = ui.canvas.height * percent;
-            var offset = ui.canvas.height - height - 1;
-            var barWidth = ui.canvas.width / soundAnalyzer.frequencyBinCount;
+        // var value, green, red, percent, height, offset, barWidth
 
-            ui.drawContext.fillStyle = 'rgba('+ red +','+ green +','+ value +', 1)';
-            ui.drawContext.fillRect(i * barWidth, offset, barWidth , value * 5);
-            ui.drawContext.strokeStyle = 'rgba('+ (red + 30) +','+ (green + 30) +','+ (value + 30) +', 0.8)';
-            ui.drawContext.lineWidth   = 3;
-            ui.drawContext.strokeRect(i * barWidth, offset, barWidth , value * 5);
-        }
+        // for (var i = 0, bc = frequencyBinCount;i < bc; i++) {
+        //     value    = frequency[i];
+        //     green    = 255 - value;
+        //     red      = value  * 2;
+        //     percent  = value / 256;
+        //     height   = ui.canvas.height * percent;
+        //     offset   = ui.canvas.height - height - 1;
+        //     barWidth = ui.canvas.width / frequencyBinCount;
+
+        //     // ui.drawContext.fillStyle = 'rgba('+ red +','+ green +','+ value +', 1)';
+        //     // ui.drawContext.fillRect(i * barWidth, offset, barWidth , value * 5);
+        //     ui.drawContext.strokeStyle = 'rgba('+ (red + 30) +','+ (green + 30) +','+ (value + 30) +', 0.8)';
+        //     ui.drawContext.lineWidth   = 5;
+        //     ui.drawContext.strokeRect(i * barWidth, offset, barWidth , value * 5);
+        // }
     };
 
-    ui.oscillo = function (soundAnalyzer, frequency) {
-        ui.oscillo.FFT = 128;
+    ui.oscillo = function (frequencyBinCount, frequency) {
+        ui.oscillo.FFT = 32;
+        // ui.drawContext.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
+        blurBackground(frequency || [10]);
+        // lineStroke(frequency[10] || 10);
 
-        ui.drawContext.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
-        ui.drawBackground(frequency[10] || 10);
-        ui.lineStroke(frequency[10] || 10);
+        // ui.drawContext.lineWidth = 8;
+        // ui.drawContext.beginPath();
 
-        ui.drawContext.lineWidth = 8;
-        ui.drawContext.beginPath();
+        // var sliceWidth = ui.canvas.width / frequencyBinCount;
+        // var x = 0;
 
-        var sliceWidth = ui.canvas.width / soundAnalyzer.frequencyBinCount;
-        var x = 0;
+        // for (var i = 0; i < frequencyBinCount; i++) {
 
-        for (var i = 0; i < soundAnalyzer.frequencyBinCount; i++) {
+        //     var v = frequency[i] / 64;
+        //     var y = (-(v * ui.canvas.height/2) + canvas.height * 2) - canvas.height/2;
 
-            var v = frequency[i] / 64;
-            var y = - (v * ui.canvas.height/2) + canvas.height * 2;
- 
-            if (i === 0) {
-                ui.drawContext.moveTo(x, y/2);
-            } else {
-                ui.drawContext.lineTo(x, y/2);
-            }
-            x += sliceWidth;
-        }
+        //     if (i === 0) {
+        //         ui.drawContext.moveTo(x, y/2);
+        //     } else {
+        //         ui.drawContext.lineTo(x, y/2);
+        //     }
+        //     x += sliceWidth;
+        // }
 
-        ui.drawContext.lineTo(ui.canvas.width, -frequency[frequency.length - 1] + ui.canvas.height);
-        ui.drawContext.stroke();
+        // ui.drawContext.lineTo(ui.canvas.width, -frequency[frequency.length - 1] + ui.canvas.height);
+        // ui.drawContext.stroke();
     };
 
-    ui.abyss = function (soundAnalyzer, frequency) {
+    ui.abyss = function (frequencyBinCount, frequency) {
         ui.abyss.FFT = 32;
         ui.drawContext.clearRect(0, 0, ui.canvas.width, ui.canvas.height);
 
-        ui.drawBackground(frequency[10] || 10);
+        drawBackground(frequency[10] || 10);
         ui.drawContext.strokeStyle = 'black';
         ui.drawContext.lineWidth = 5;
 
@@ -87,7 +108,7 @@ var ui = ui || {};
 
         ui.drawContext.beginPath();
 
-        for (var i = 0; i < soundAnalyzer.frequencyBinCount; i++) {
+        for (var i = 0; i < frequencyBinCount; i++) {
             if (i%2) {
                 radius = frequency[i] * 1.2;
                 ui.drawContext.arc(x, y, radius, startAngle, endAngle, true);
